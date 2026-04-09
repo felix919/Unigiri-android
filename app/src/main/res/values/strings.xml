@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">うにぎり</string>
+
+    <!-- TODO: 本番用の AdMob ID に差し替え -->
+    <string name="admob_app_id">YOUR_PRODUCTION_APP_ID</string>
+    <string name="admob_banner_unit_id">YOUR_PRODUCTION_BANNER_UNIT_ID</string>
 </resources>

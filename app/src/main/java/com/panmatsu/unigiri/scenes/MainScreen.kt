@@ -4,8 +4,10 @@ import androidx.navigation.compose.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import com.panmatsu.unigiri.R
 import com.panmatsu.unigiri.scenes.battle.BattleScreen
 import com.panmatsu.unigiri.scenes.search.FilterBottomSheet
@@ -38,43 +40,48 @@ fun MainScreen(
             }
         },
         bottomBar = {
-            NavigationBar {
-                NavigationBarItem(
-                    selected = currentRoute == Screen.Battle.route,
-                    onClick = {
-                        tabNavController.navigate(Screen.Battle.route) {
-                            popUpTo(tabNavController.graph.startDestinationId) {
-                                saveState = true
-                            }
-                            launchSingleTop = true
-                            restoreState = true
-                        }
-                    },
-                    icon = {
-                        Icon(painterResource(R.drawable.baseline_sword), contentDescription = null)
-                    },
-                    label = { Text("Battle") }
+            Column {
+                AdBanner(
+                    adUnitId = stringResource(R.string.admob_banner_unit_id)
                 )
+                NavigationBar {
+                    NavigationBarItem(
+                        selected = currentRoute == Screen.Battle.route,
+                        onClick = {
+                            tabNavController.navigate(Screen.Battle.route) {
+                                popUpTo(tabNavController.graph.startDestinationId) {
+                                    saveState = true
+                                }
+                                launchSingleTop = true
+                                restoreState = true
+                            }
+                        },
+                        icon = {
+                            Icon(painterResource(R.drawable.baseline_sword), contentDescription = null)
+                        },
+                        label = { Text("Battle") }
+                    )
 
-                NavigationBarItem(
-                    selected = currentRoute == Screen.CardList.route,
-                    onClick = {
-                        tabNavController.navigate(Screen.CardList.route) {
-                            popUpTo(tabNavController.graph.startDestinationId) {
-                                saveState = true
+                    NavigationBarItem(
+                        selected = currentRoute == Screen.CardList.route,
+                        onClick = {
+                            tabNavController.navigate(Screen.CardList.route) {
+                                popUpTo(tabNavController.graph.startDestinationId) {
+                                    saveState = true
+                                }
+                                launchSingleTop = true
+                                restoreState = true
                             }
-                            launchSingleTop = true
-                            restoreState = true
-                        }
-                    },
-                    icon = {
-                        Icon(
-                            painterResource(R.drawable.ic_card_list),
-                            contentDescription = null
-                        )
-                    },
-                    label = { Text("CardList") }
-                )
+                        },
+                        icon = {
+                            Icon(
+                                painterResource(R.drawable.ic_card_list),
+                                contentDescription = null
+                            )
+                        },
+                        label = { Text("CardList") }
+                    )
+                }
             }
         }
     ) { padding ->
