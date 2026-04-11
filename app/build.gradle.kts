@@ -37,6 +37,20 @@ android {
         buildConfigField("String", "ZUTOMAYO_BEARER", "\"${localProperties["ZUTOMAYO_BEARER"]}\"")
     }
 
+    flavorDimensions += "version"
+    productFlavors {
+        create("free") {
+            dimension = "version"
+            applicationIdSuffix = ".free"
+            buildConfigField("Boolean", "SHOW_ADS", "true")
+        }
+        create("paid") {
+            dimension = "version"
+            applicationIdSuffix = ".paid"
+            buildConfigField("Boolean", "SHOW_ADS", "false")
+        }
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = false

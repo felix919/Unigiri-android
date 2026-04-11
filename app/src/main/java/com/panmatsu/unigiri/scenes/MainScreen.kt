@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import com.panmatsu.unigiri.BuildConfig
 import com.panmatsu.unigiri.R
 import com.panmatsu.unigiri.scenes.battle.BattleScreen
 import com.panmatsu.unigiri.scenes.search.FilterBottomSheet
@@ -41,9 +42,11 @@ fun MainScreen(
         },
         bottomBar = {
             Column {
-                AdBanner(
-                    adUnitId = stringResource(R.string.admob_banner_unit_id)
-                )
+                if (BuildConfig.SHOW_ADS) {
+                    AdBanner(
+                        adUnitId = stringResource(R.string.admob_banner_unit_id)
+                    )
+                }
                 NavigationBar {
                     NavigationBarItem(
                         selected = currentRoute == Screen.Battle.route,
