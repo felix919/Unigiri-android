@@ -51,9 +51,28 @@ android {
         }
     }
 
+    signingConfigs {
+        create("release") {
+            // local.properties ファイルからプロパティを読み込む
+            val localProperties = Properties()
+            val localPropertiesFile = rootProject.file("local.properties")
+            if (localPropertiesFile.exists()) {
+                localPropertiesFile.inputStream().use { stream ->
+                    localProperties.load(stream)
+                }
+            }
+            storeFile = file("../unigiri-release.keystore")
+            storePassword = "${localProperties["STORE_PASSWORD"]}"
+            keyAlias = "unigiri"
+            keyPassword = "${localProperties["KEY_PASSWORD"]}"
+        }
+    }
+
     buildTypes {
         release {
-            isMinifyEnabled = false
+            signingConfig = signingConfigs.getByName("release")
+            isMinifyEnabled = true
+            isShrinkResources = true  // 未使用リソースも削除
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
