@@ -10,6 +10,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import com.panmatsu.unigiri.BuildConfig
 import com.panmatsu.unigiri.R
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Info
+import com.panmatsu.unigiri.scenes.about.AboutScreen
 import com.panmatsu.unigiri.scenes.battle.BattleScreen
 import com.panmatsu.unigiri.scenes.search.FilterBottomSheet
 import com.panmatsu.unigiri.scenes.search.SearchScreen
@@ -84,6 +87,23 @@ fun MainScreen(
                         },
                         label = { Text("CardList") }
                     )
+
+                    NavigationBarItem(
+                        selected = currentRoute == Screen.About.route,
+                        onClick = {
+                            tabNavController.navigate(Screen.About.route) {
+                                popUpTo(tabNavController.graph.startDestinationId) {
+                                    saveState = true
+                                }
+                                launchSingleTop = true
+                                restoreState = true
+                            }
+                        },
+                        icon = {
+                            Icon(Icons.Default.Info, contentDescription = null)
+                        },
+                        label = { Text("About") }
+                    )
                 }
             }
         }
@@ -111,6 +131,10 @@ fun MainScreen(
                     )
                 }
             }
+
+            composable(Screen.About.route) {
+                AboutScreen()
+            }
         }
     }
 }
@@ -118,4 +142,5 @@ fun MainScreen(
 sealed class Screen(val route: String) {
     object CardList : Screen("cardList")
     object Battle : Screen("battle")
+    object About : Screen("about")
 }
