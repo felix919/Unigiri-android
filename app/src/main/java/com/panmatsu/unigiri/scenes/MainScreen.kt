@@ -21,7 +21,8 @@ import com.panmatsu.unigiri.scenes.search.SearchViewModel
 @Composable
 fun MainScreen(
     viewModel: SearchViewModel,
-    onCardClick: (String) -> Unit
+    onCardClick: (String) -> Unit,
+    onNavigateToWebView: (title: String, url: String) -> Unit
 ) {
     val tabNavController = rememberNavController()
     val currentRoute = tabNavController
@@ -133,7 +134,7 @@ fun MainScreen(
             }
 
             composable(Screen.About.route) {
-                AboutScreen()
+                AboutScreen(onNavigateToWebView = onNavigateToWebView)
             }
         }
     }

@@ -1,18 +1,27 @@
 package com.panmatsu.unigiri.scenes.about
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.panmatsu.unigiri.R
 
 @Composable
-fun AboutScreen() {
+fun AboutScreen(
+    onNavigateToWebView: (title: String, url: String) -> Unit
+) {
     val scrollState = rememberScrollState()
+    val baseUrl = stringResource(R.string.url_github_unigiri)
 
     Column(
         modifier = Modifier
@@ -31,6 +40,19 @@ fun AboutScreen() {
             fontSize = 14.sp,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             modifier = Modifier.padding(top = 4.dp)
+        )
+
+        HorizontalDivider(modifier = Modifier.padding(vertical = 16.dp))
+
+        // リンク
+        LinkItem(
+            title = "利用規約",
+            onClick = { onNavigateToWebView("利用規約", "$baseUrl/terms-of-service.html") }
+        )
+
+        LinkItem(
+            title = "プライバシーポリシー",
+            onClick = { onNavigateToWebView("プライバシーポリシー", "$baseUrl/privacy-policy.html") }
         )
 
         HorizontalDivider(modifier = Modifier.padding(vertical = 16.dp))
@@ -70,88 +92,28 @@ fun AboutScreen() {
             lineHeight = 22.sp
         )
 
-        HorizontalDivider(modifier = Modifier.padding(vertical = 16.dp))
+        Spacer(modifier = Modifier.height(32.dp))
+    }
+}
 
-        // プライバシーポリシー
-        SectionTitle("プライバシーポリシー")
-
-        SubSectionTitle("1. 本アプリが収集する情報")
+@Composable
+private fun LinkItem(title: String, onClick: () -> Unit) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable(onClick = onClick)
+            .padding(vertical = 14.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
         Text(
-            text = "本アプリは、ユーザーの個人情報を直接収集することはありません。" +
-                    "本アプリはカード情報の検索および対戦サポート機能を提供するものであり、アカウント登録やログインは不要です。",
-            fontSize = 14.sp,
-            lineHeight = 22.sp
+            text = title,
+            fontSize = 16.sp
         )
-
-        SubSectionTitle("2. 広告配信について")
-        Text(
-            text = "本アプリでは、広告配信のために Google AdMob を使用しています。" +
-                    "AdMob は以下の情報を自動的に収集する場合があります。",
-            fontSize = 14.sp,
-            lineHeight = 22.sp
-        )
-        BulletList(
-            items = listOf(
-                "広告ID",
-                "デバイス情報（機種名、OSバージョンなど）",
-                "IPアドレス",
-                "アプリの利用状況"
-            )
-        )
-        Text(
-            text = "これらの情報は、広告の表示および最適化のために使用されます。" +
-                    "Google によるデータの取り扱いについては、Google プライバシーポリシー（https://policies.google.com/privacy）をご確認ください。",
-            fontSize = 14.sp,
-            lineHeight = 22.sp
-        )
-
-        SubSectionTitle("3. パーソナライズ広告について")
-        Text(
-            text = "Google AdMob は、収集した情報をもとにパーソナライズされた広告を表示する場合があります。" +
-                    "パーソナライズ広告を希望しない場合は、端末の設定から変更できます。",
-            fontSize = 14.sp,
-            lineHeight = 22.sp
-        )
-        BulletList(
-            items = listOf(
-                "設定 > Google > 広告 > 「広告のパーソナライズをオプトアウト」を有効にする",
-                "広告IDのリセット: 同じ設定画面から「広告IDをリセット」を選択する"
-            )
-        )
-
-        SubSectionTitle("4. 第三者への情報提供")
-        Text(
-            text = "本アプリは、前述の広告配信（Google AdMob）を除き、ユーザーの情報を第三者に提供することはありません。",
-            fontSize = 14.sp,
-            lineHeight = 22.sp
-        )
-
-        SubSectionTitle("5. お子様のプライバシー")
-        Text(
-            text = "本アプリは、13歳未満のお子様から意図的に個人情報を収集することはありません。",
-            fontSize = 14.sp,
-            lineHeight = 22.sp
-        )
-
-        SubSectionTitle("6. プライバシーポリシーの変更")
-        Text(
-            text = "本プライバシーポリシーは、必要に応じて変更されることがあります。変更があった場合は、本画面にて更新いたします。",
-            fontSize = 14.sp,
-            lineHeight = 22.sp
-        )
-
-        SubSectionTitle("7. お問い合わせ")
-        Text(
-            text = "本プライバシーポリシーに関するお問い合わせは、以下のメールアドレスまでご連絡ください。\n\npanmatsu@gmail.com",
-            fontSize = 14.sp,
-            lineHeight = 22.sp
-        )
-
-        Text(
-            text = "制定日: 2026年4月12日",
-            fontSize = 12.sp,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-            modifier = Modifier.padding(top = 24.dp, bottom = 32.dp)
+        Icon(
+            Icons.AutoMirrored.Filled.KeyboardArrowRight,
+            contentDescription = null,
+            tint = MaterialTheme.colorScheme.onSurfaceVariant
         )
     }
 }
@@ -174,17 +136,4 @@ private fun SubSectionTitle(text: String) {
         fontWeight = FontWeight.SemiBold,
         modifier = Modifier.padding(top = 12.dp, bottom = 4.dp)
     )
-}
-
-@Composable
-private fun BulletList(items: List<String>) {
-    Column(modifier = Modifier.padding(start = 16.dp, top = 4.dp, bottom = 4.dp)) {
-        items.forEach { item ->
-            Text(
-                text = "・$item",
-                fontSize = 14.sp,
-                lineHeight = 22.sp
-            )
-        }
-    }
 }
