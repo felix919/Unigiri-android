@@ -2,11 +2,14 @@ package com.panmatsu.unigiri.scenes
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.panmatsu.unigiri.R
 import com.panmatsu.unigiri.scenes.about.WebViewScreen
+import com.panmatsu.unigiri.scenes.deck.DeckEditScreen
 import com.panmatsu.unigiri.scenes.search.CardDetailScreen
 import com.panmatsu.unigiri.scenes.search.SearchViewModel
 import java.net.URLDecoder
@@ -55,6 +58,11 @@ fun AppNavHost(
                 onCardClick = { cardId ->
                     rootNavController.navigate("cardDetail/$cardId")
                 },
+                onDeckEdit = { deckId ->
+                    rootNavController.navigate(
+                        if (deckId != null) "deckEdit?deckId=$deckId" else "deckEdit"
+                    )
+                },
                 onNavigateToWebView = { title, url ->
                     navigateToWebView(title, url)
                 }
@@ -66,6 +74,22 @@ fun AppNavHost(
             CardDetailScreen(
                 cardId = cardId,
                 viewModel = viewModel,
+                onBack = { rootNavController.popBackStack() }
+            )
+        }
+
+        composable(
+            route = "deckEdit?deckId={deckId}",
+            arguments = listOf(
+                navArgument("deckId") {
+                    type = NavType.StringType
+                    nullable = true
+                    defaultValue = null
+                }
+            )
+        ) { backStackEntry ->
+            DeckEditScreen(
+                deckId = backStackEntry.arguments?.getString("deckId"),
                 onBack = { rootNavController.popBackStack() }
             )
         }

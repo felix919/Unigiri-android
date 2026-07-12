@@ -12,9 +12,16 @@ import androidx.compose.ui.res.stringResource
 import com.panmatsu.unigiri.BuildConfig
 import com.panmatsu.unigiri.R
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.Style
+import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.panmatsu.unigiri.scenes.about.AboutScreen
 import com.panmatsu.unigiri.scenes.battle.BattleScreen
+import com.panmatsu.unigiri.scenes.deck.DeckListScreen
+import com.panmatsu.unigiri.scenes.deck.DeckListViewModel
+import com.panmatsu.unigiri.scenes.deck.DeckListViewModelFactory
 import com.panmatsu.unigiri.scenes.search.FilterBottomSheet
 import com.panmatsu.unigiri.scenes.search.SearchScreen
 import com.panmatsu.unigiri.scenes.search.SearchViewModel
@@ -24,6 +31,7 @@ import com.panmatsu.unigiri.ui.theme.MainColor
 fun MainScreen(
     viewModel: SearchViewModel,
     onCardClick: (String) -> Unit,
+    onDeckEdit: (String?) -> Unit,
     onNavigateToWebView: (title: String, url: String) -> Unit
 ) {
     val tabNavController = rememberNavController()
@@ -35,14 +43,24 @@ fun MainScreen(
 
     Scaffold(
         floatingActionButton = {
-            if (currentRoute == Screen.CardList.route) {
-                FloatingActionButton(
-                    onClick = { showSheet = true }
-                ) {
-                    Icon(
-                        painterResource(R.drawable.baseline_search),
-                        "Floating action button."
-                    )
+            when (currentRoute) {
+                Screen.CardList.route -> {
+                    FloatingActionButton(
+                        onClick = { showSheet = true }
+                    ) {
+                        Icon(
+                            painterResource(R.drawable.baseline_search),
+                            "Floating action button."
+                        )
+                    }
+                }
+
+                Screen.Deck.route -> {
+                    FloatingActionButton(
+                        onClick = { onDeckEdit(null) }
+                    ) {
+                        Icon(Icons.Default.Add, contentDescription = "デッキ作成")
+                    }
                 }
             }
         },
@@ -92,6 +110,23 @@ fun MainScreen(
                     )
 
                     NavigationBarItem(
+                        selected = currentRoute == Screen.Deck.route,
+                        onClick = {
+                            tabNavController.navigate(Screen.Deck.route) {
+                                popUpTo(tabNavController.graph.startDestinationId) {
+                                    saveState = true
+                                }
+                                launchSingleTop = true
+                                restoreState = true
+                            }
+                        },
+                        icon = {
+                            Icon(Icons.Default.Style, contentDescription = null)
+                        },
+                        label = { Text("Deck") }
+                    )
+
+                    NavigationBarItem(
                         selected = currentRoute == Screen.About.route,
                         onClick = {
                             tabNavController.navigate(Screen.About.route) {
@@ -137,6 +172,17 @@ fun MainScreen(
                 }
             }
 
+            composable(Screen.Deck.route) {
+                val context = LocalContext.current
+                val deckListViewModel: DeckListViewModel = viewModel(
+                    factory = DeckListViewModelFactory(context.applicationContext)
+                )
+                DeckListScreen(
+                    viewModel = deckListViewModel,
+                    onDeckClick = { deckId -> onDeckEdit(deckId) }
+                )
+            }
+
             composable(Screen.About.route) {
                 AboutScreen(onNavigateToWebView = onNavigateToWebView)
             }
@@ -147,5 +193,6 @@ fun MainScreen(
 sealed class Screen(val route: String) {
     object CardList : Screen("cardList")
     object Battle : Screen("battle")
+    object Deck : Screen("deck")
     object About : Screen("about")
 }
