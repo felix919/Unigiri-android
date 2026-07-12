@@ -22,16 +22,16 @@ fun BattleScreen(
     Box(
         modifier = modifier
             .fillMaxSize()
-            .background(
-                Brush.verticalGradient(
-                    listOf(
-                        Color(0x332196F3),
-                        Color(0x332196F3),
-                        Color(0x33FFF59D),
-                        Color(0x33FFF59D)
-                    )
-                )
-            )
+//            .background(
+//                Brush.verticalGradient(
+//                    listOf(
+//                        Color(0x332196F3),
+//                        Color(0x332196F3),
+//                        Color(0x33FFF59D),
+//                        Color(0x33FFF59D)
+//                    )
+//                )
+//            )
     ) {
 
         Column(

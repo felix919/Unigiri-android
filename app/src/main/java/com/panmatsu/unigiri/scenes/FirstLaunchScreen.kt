@@ -63,7 +63,9 @@ fun FirstLaunchScreen(
             onClick = onAgree,
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text("同意して利用を開始する")
+            Text(
+                text = "同意して利用を開始する"
+            )
         }
     }
 }

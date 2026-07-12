@@ -1,5 +1,6 @@
 package com.panmatsu.unigiri.scenes
 
+import androidx.compose.foundation.background
 import androidx.navigation.compose.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -17,6 +18,7 @@ import com.panmatsu.unigiri.scenes.battle.BattleScreen
 import com.panmatsu.unigiri.scenes.search.FilterBottomSheet
 import com.panmatsu.unigiri.scenes.search.SearchScreen
 import com.panmatsu.unigiri.scenes.search.SearchViewModel
+import com.panmatsu.unigiri.ui.theme.MainColor
 
 @Composable
 fun MainScreen(
@@ -113,7 +115,9 @@ fun MainScreen(
         NavHost(
             navController = tabNavController,
             startDestination = Screen.Battle.route,
-            modifier = Modifier.padding(padding)
+            modifier = Modifier
+                .padding(padding)
+                .background(color = MainColor)
         ) {
             composable(Screen.Battle.route) {
                 BattleScreen()

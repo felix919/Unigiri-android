@@ -3,14 +3,17 @@ package com.panmatsu.unigiri
 import android.content.Context
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.core.view.WindowCompat
+import androidx.compose.ui.res.colorResource
+import androidx.core.content.ContextCompat
 import com.google.android.gms.ads.MobileAds
 import com.panmatsu.unigiri.scenes.AppNavHost
 import com.panmatsu.unigiri.ui.theme.UnigiriTheme
@@ -19,6 +22,7 @@ import com.panmatsu.unigiri.scenes.search.SearchViewModelFactory
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import androidx.core.content.edit
 
 class MainActivity : ComponentActivity() {
 
@@ -38,9 +42,11 @@ class MainActivity : ComponentActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        val mainColor = ContextCompat.getColor(this, R.color.main_color)
+        enableEdgeToEdge(
+            statusBarStyle = SystemBarStyle.dark(mainColor)
+        )
         super.onCreate(savedInstanceState)
-
-        WindowCompat.setDecorFitsSystemWindows(window, true)
 
         val prefs = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
         val initialConsent = prefs.getBoolean(KEY_CONSENT, false)
@@ -54,6 +60,7 @@ class MainActivity : ComponentActivity() {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
+                    //color = colorResource(R.color.main_color)
                 ) {
                     var hasConsent by remember { mutableStateOf(initialConsent) }
 
@@ -61,7 +68,7 @@ class MainActivity : ComponentActivity() {
                         viewModel = viewModel,
                         hasConsent = hasConsent,
                         onConsent = {
-                            prefs.edit().putBoolean(KEY_CONSENT, true).apply()
+                            prefs.edit { putBoolean(KEY_CONSENT, true) }
                             hasConsent = true
                             initializeAds()
                         }
