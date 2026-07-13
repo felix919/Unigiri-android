@@ -1,6 +1,8 @@
 package com.panmatsu.unigiri.scenes.deck
 
 import android.content.Context
+import android.net.Uri
+import androidx.core.content.FileProvider
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
@@ -18,7 +20,9 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class DeckListViewModel(
-    private val interactor: DeckInteractor
+    private val interactor: DeckInteractor,
+    private val imageRenderer: DeckImageRenderer,
+    private val context: Context,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(DeckListUiState())
@@ -46,11 +50,41 @@ class DeckListViewModel(
             }
         }
     }
+
+    fun shareDeckImage(deck: DeckModel) {
+        viewModelScope.launch {
+            _uiState.update { it.copy(isGeneratingShareImage = true) }
+            try {
+                val file = imageRenderer.renderToFile(deck)
+                val uri = FileProvider.getUriForFile(
+                    context,
+                    "${context.packageName}.fileprovider",
+                    file,
+                )
+                _uiState.update { it.copy(shareUri = uri) }
+            } catch (e: Exception) {
+                _uiState.update { it.copy(shareError = "画像の取得に失敗しました") }
+            } finally {
+                _uiState.update { it.copy(isGeneratingShareImage = false) }
+            }
+        }
+    }
+
+    fun consumeShareUri() {
+        _uiState.update { it.copy(shareUri = null) }
+    }
+
+    fun clearShareError() {
+        _uiState.update { it.copy(shareError = null) }
+    }
 }
 
 data class DeckListUiState(
     val decks: List<DeckModel> = emptyList(),
     val error: String? = null,
+    val isGeneratingShareImage: Boolean = false,
+    val shareUri: Uri? = null,
+    val shareError: String? = null,
 )
 
 class DeckListViewModelFactory(
@@ -67,6 +101,10 @@ class DeckListViewModelFactory(
             deleteDeckUseCase = DeleteDeckUseCase(repository),
         )
 
-        return DeckListViewModel(interactor) as T
+        return DeckListViewModel(
+            interactor = interactor,
+            imageRenderer = DeckImageRenderer(context),
+            context = context,
+        ) as T
     }
 }
