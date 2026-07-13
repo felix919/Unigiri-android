@@ -205,8 +205,10 @@ private fun SelectedSection(
                 )
             }
         } else {
+            // 基本6列、6列で4行目に折り返す(19種類以上)場合は7列に切り替える
+            val columnCount = if (state.selectedEntries.size >= 19) 7 else 6
             LazyVerticalGrid(
-                columns = GridCells.Fixed(5),
+                columns = GridCells.Fixed(columnCount),
                 modifier = Modifier.fillMaxSize()
             ) {
                 items(state.selectedEntries, key = { it.cardId }) { entry ->
