@@ -1,42 +1,45 @@
 package com.panmatsu.unigiri.ui.theme
 
-import android.os.Build
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
-import androidx.compose.material3.dynamicDarkColorScheme
-import androidx.compose.material3.dynamicLightColorScheme
-import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 
+// 公式サイト準拠のパープル基調で全体を統一する
+// surface系を未指定にするとM3デフォルトのほぼ黒になり、TopBar等が背景から浮くため明示する
 private val DarkColorScheme = darkColorScheme(
     primary = LightPurple,
     onPrimary = Color.White,
     primaryContainer = LightPurple,
     onPrimaryContainer = Color.White,
-    secondary = PurpleGrey80,
+    secondary = BrandGreen,
+    onSecondary = Color.White,
     tertiary = Pink80,
     background = MainColor,
     onBackground = Color.White,
-)
 
+    // TopAppBar など
+    surface = SurfacePurple,
+    onSurface = Color.White,
+    surfaceVariant = SurfacePurpleContainer,
+    onSurfaceVariant = PurpleGrey80,
+
+    // NavigationBar / DropdownMenu = surfaceContainer,
+    // ModalBottomSheet = surfaceContainerLow, AlertDialog = surfaceContainerHigh
+    surfaceContainerLowest = SurfacePurpleDark,
+    surfaceContainerLow = SurfacePurple,
+    surfaceContainer = SurfacePurpleContainer,
+    surfaceContainerHigh = SurfacePurpleHigh,
+    surfaceContainerHighest = SurfacePurpleHighest,
+
+    outline = PurpleGrey80,
+    outlineVariant = SurfacePurpleHighest,
+)
 
 @Composable
 fun UnigiriTheme(
     content: @Composable () -> Unit
 ) {
-//    val colorScheme = when {
-//        dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
-//            val context = LocalContext.current
-//            if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
-//        }
-//
-//        darkTheme -> DarkColorScheme
-//        else -> LightColorScheme
-//    }
-
     MaterialTheme(
         colorScheme = DarkColorScheme,
         typography = Typography,

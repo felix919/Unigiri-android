@@ -47,9 +47,10 @@ import com.panmatsu.unigiri.scenes.search.FilterBottomSheet
 import com.panmatsu.unigiri.scenes.search.SearchUiState
 import com.panmatsu.unigiri.scenes.search.SearchViewModel
 import com.panmatsu.unigiri.scenes.search.SearchViewModelFactory
+import com.panmatsu.unigiri.ui.theme.BrandGreen
 
 private val WarningOrange = Color(0xFFFF9800)
-private val CompleteGreen = Color(0xFF4CAF50)
+private val CompleteGreen = BrandGreen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
