@@ -51,6 +51,12 @@ adb install -r app/build/outputs/apk/free/debug/app-free-debug.apk
 - `scenes/search/FiterBottomSheet.kt` はファイル名が typo だが中身の `FilterBottomSheet` は現役
 - `pack: List<String>` は Gson TypeConverter (`data/local/Converters.kt`) で永続化
 
+## テーマ (公式サイト準拠・ダーク固定)
+
+- ブランドカラーは `ui/theme/Color.kt` に集約 (iOS版 `Theme/AppTheme.swift` と同一値): 背景 `MainColor #422881` / primary `LightPurple #8B7FD6` / secondary `BrandGreen #36AE37` (公式グリーン) / surface階調 `#241546`〜`#4A2F8F`
+- `Theme.kt` の `darkColorScheme` で **surface系を必ず明示する** — 未指定だと M3 デフォルトのほぼ黒になり TopAppBar/NavigationBar/シートが背景から浮く (過去に発生)
+- コンポーネント対応: TopAppBar=`surface`、NavigationBar/DropdownMenu=`surfaceContainer`、ModalBottomSheet=`surfaceContainerLow`、AlertDialog=`surfaceContainerHigh`
+
 ## API
 
 - Meilisearch: POST `https://search.zutomayocard.net/indexes/zutomayocard_cards/search` (Retrofit + `AuthInterceptor` が Bearer 付与)
