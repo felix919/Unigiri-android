@@ -53,6 +53,8 @@ fun DeckListScreen(
     val state by viewModel.uiState.collectAsState()
     val context = LocalContext.current
 
+    var handCheckDeck by remember { mutableStateOf<DeckModel?>(null) }
+
     // 画像生成完了でOSの共有シートを開く
     LaunchedEffect(state.shareUri) {
         state.shareUri?.let { uri ->
@@ -64,6 +66,13 @@ fun DeckListScreen(
             context.startActivity(Intent.createChooser(intent, null))
             viewModel.consumeShareUri()
         }
+    }
+
+    handCheckDeck?.let { deck ->
+        HandSimulatorSheet(
+            deck = deck,
+            onDismiss = { handCheckDeck = null }
+        )
     }
 
     state.shareError?.let { message ->
@@ -105,6 +114,7 @@ fun DeckListScreen(
                             onClick = { onDeckClick(deck.id) },
                             onDelete = { viewModel.delete(deck.id) },
                             onShare = { viewModel.shareDeckImage(deck) },
+                            onHandCheck = { handCheckDeck = deck },
                         )
                     }
                 }
@@ -125,6 +135,7 @@ private fun DeckRow(
     onClick: () -> Unit,
     onDelete: () -> Unit,
     onShare: () -> Unit,
+    onHandCheck: () -> Unit,
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -192,6 +203,14 @@ private fun DeckRow(
                     onClick = {
                         menuExpanded = false
                         onShare()
+                    }
+                )
+                DropdownMenuItem(
+                    text = { Text("初期手札チェック") },
+                    enabled = deck.totalCount == DeckValidator.DECK_SIZE,
+                    onClick = {
+                        menuExpanded = false
+                        onHandCheck()
                     }
                 )
             }
