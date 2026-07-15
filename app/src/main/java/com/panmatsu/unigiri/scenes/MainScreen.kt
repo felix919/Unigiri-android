@@ -8,8 +8,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.Column
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
-import com.panmatsu.unigiri.BuildConfig
 import com.panmatsu.unigiri.R
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -66,11 +64,6 @@ fun MainScreen(
         },
         bottomBar = {
             Column {
-                if (BuildConfig.SHOW_ADS) {
-                    AdBanner(
-                        adUnitId = stringResource(R.string.admob_banner_unit_id)
-                    )
-                }
                 NavigationBar {
                     NavigationBarItem(
                         selected = currentRoute == Screen.Battle.route,

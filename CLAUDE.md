@@ -6,9 +6,9 @@
 ## ビルド・実行
 
 ```bash
-./gradlew :app:assembleFreeDebug        # ビルド (flavor: free / paid)
-./gradlew :app:testFreeDebugUnitTest    # ユニットテスト
-adb install -r app/build/outputs/apk/free/debug/app-free-debug.apk
+./gradlew :app:assembleDebug        # ビルド (variantはdebug/releaseのみ、flavorなし)
+./gradlew :app:testDebugUnitTest    # ユニットテスト
+adb install -r app/build/outputs/apk/debug/app-debug.apk
 ```
 
 - 単一 `:app` モジュール、パッケージ `com.panmatsu.unigiri`
@@ -16,6 +16,7 @@ adb install -r app/build/outputs/apk/free/debug/app-free-debug.apk
 - **version catalog は無い** — 依存はすべて `app/build.gradle.kts` にインライン記述。プラグインのバージョンも app モジュール側で宣言 (compose / ksp が前例)
 - `ZUTOMAYO_BEARER`(APIキー) と署名情報は `local.properties` から BuildConfig へ注入
 - 100% Jetpack Compose (XMLレイアウト無し)
+- **広告なし・個人情報収集なし**。初回起動の同意ゲートも無し (閲覧同意方式)。利用規約/プライバシーポリシーは `docs/` (GitHub Pages: felix919.github.io/Unigiri-android) でホストし、About タブからWebView表示 — アプリの収集実態を変える変更 (SDK追加等) をしたら docs/ の文書も更新すること
 
 ## アーキテクチャ (クリーンアーキテクチャ)
 

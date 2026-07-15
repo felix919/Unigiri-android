@@ -38,20 +38,6 @@ android {
         buildConfigField("String", "ZUTOMAYO_BEARER", "\"${localProperties["ZUTOMAYO_BEARER"]}\"")
     }
 
-    flavorDimensions += "version"
-    productFlavors {
-        create("free") {
-            dimension = "version"
-            applicationIdSuffix = ".free"
-            buildConfigField("Boolean", "SHOW_ADS", "true")
-        }
-        create("paid") {
-            dimension = "version"
-            applicationIdSuffix = ".paid"
-            buildConfigField("Boolean", "SHOW_ADS", "false")
-        }
-    }
-
     signingConfigs {
         create("release") {
             // local.properties ファイルからプロパティを読み込む
@@ -129,5 +115,4 @@ dependencies {
     implementation("androidx.room:room-ktx:2.7.1")
     ksp("androidx.room:room-compiler:2.7.1")
 
-    implementation("com.google.android.gms:play-services-ads:25.1.0")
 }
