@@ -20,7 +20,11 @@ import coil.request.ImageRequest
 import com.panmatsu.unigiri.model.DeckCardModel
 
 @Composable
-fun SelectedCardCell(card: DeckCardModel, modifier: Modifier = Modifier) {
+fun SelectedCardCell(
+    card: DeckCardModel,
+    modifier: Modifier = Modifier,
+    showCountBadge: Boolean = true,
+) {
     val context = LocalContext.current
 
     val request = ImageRequest.Builder(context)
@@ -39,7 +43,7 @@ fun SelectedCardCell(card: DeckCardModel, modifier: Modifier = Modifier) {
             contentScale = ContentScale.Crop
         )
 
-        if (card.count > 1) {
+        if (showCountBadge && card.count > 1) {
             CountBadge(
                 count = card.count,
                 modifier = Modifier.align(Alignment.TopEnd)

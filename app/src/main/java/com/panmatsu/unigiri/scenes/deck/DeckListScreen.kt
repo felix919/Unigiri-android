@@ -148,7 +148,8 @@ private fun DeckRow(
             deck.cards.take(3).forEach { card ->
                 SelectedCardCell(
                     card = card,
-                    modifier = Modifier.width(40.dp)
+                    modifier = Modifier.width(40.dp),
+                    showCountBadge = false,
                 )
             }
         }
